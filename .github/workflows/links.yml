@@ -119,7 +119,7 @@ jobs:
       - name: 5) Comment on PR if links broken
         # WHY: Provide visibility directly on PRs when broken links are detected.
         if: always() && github.event_name == 'pull_request'
-        uses: actions/github-script@v8
+        uses: actions/github-script@v9
         with:
           script: |
             const fs = require("fs");
@@ -177,7 +177,7 @@ jobs:
         # WHY: Track broken links found during scheduled checks.
         # OBS: Only creates issue if none already open with 'broken-links' label.
         if: always() && github.event_name == 'schedule'
-        uses: actions/github-script@v8
+        uses: actions/github-script@v9
         with:
           script: |
             const fs = require("fs");
