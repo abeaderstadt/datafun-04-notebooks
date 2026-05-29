@@ -254,7 +254,7 @@ Press `Ctrl+c` (both keys together) or `Ctrl+Z` then `Enter` on Windows.
 
 ## Citation
 
-[CITATION.cff](./CITATION.cff) - TODO: update author and repository fields to reflect your creative work
+[CITATION.cff](./CITATION.cff)
 
 <!--
 WHY: Support correct citation and attribution.
