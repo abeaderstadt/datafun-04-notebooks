@@ -35,9 +35,11 @@ I used both the original dataset columns and a couple of engineered features:
 These added features helped give a little more context to spending behavior instead of just looking at raw numbers.
 
 ### Experiments
-I did two main feature engineering steps:
+I updated the notebook and Python script to work with the Seaborn tips dataset instead of the penguins dataset, which meant adjusting column names and updating the derived features while keeping the same overall EDA workflow.
 
-- First, I binned total bill into a simple `spending_category` so it’s easier to see low vs high spenders at a glance.
+From there, I focused on two main feature engineering steps:
+
+- First, I binned total bill into a simple `spending_category` so it’s easier to see low vs high spenders quickly.
 - Then I created `bill_vs_day_avg`, which compares each transaction to the average bill for that specific day. This helps show whether a bill is above or below “normal” for that day.
 
 ### Results
