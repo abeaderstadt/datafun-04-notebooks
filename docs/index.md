@@ -1,7 +1,6 @@
 # Exploratory Data Analysis of Restaurant Tipping Data
 
 **Author: Alissa Beaderstadt**
-**Repository: https://github.com/abeaderstadt/datafun-04-notebooks**
 
 > Professional Python for Data Analytics
 
