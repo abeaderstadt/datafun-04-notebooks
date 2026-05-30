@@ -763,3 +763,108 @@ bill_vs_day_avg    0.980556  0.666384  0.578922         1.000000
 2026-05-29 19:39:25 | INFO | EDA | EDA workflow complete
 2026-05-29 19:39:25 | INFO | EDA | IMPORTANT: This script creates chart windows.
 2026-05-29 19:39:25 | INFO | EDA | Close any chart windows and terminate this process with CTRL+c as needed.
+2026-05-29 19:49:12 | INFO | EDA | === RUN START ===
+2026-05-29 19:49:12 | INFO | EDA | project=Exploratory Data Analysis (EDA) - Tips Dataset
+2026-05-29 19:49:12 | INFO | EDA | repo_dir=datafun-04-notebooks
+2026-05-29 19:49:12 | INFO | EDA | python=3.14.3
+2026-05-29 19:49:12 | INFO | EDA | os=Windows 11
+2026-05-29 19:49:12 | INFO | EDA | shell=powershell
+2026-05-29 19:49:12 | INFO | EDA | cwd=.
+2026-05-29 19:49:12 | INFO | EDA | github_actions=False
+2026-05-29 19:49:12 | INFO | EDA | Section 1: Setup at the top of the file
+2026-05-29 19:49:12 | INFO | EDA | Section 2: Load the data
+2026-05-29 19:49:12 | INFO | EDA | Loading tips dataset from seaborn
+2026-05-29 19:49:12 | INFO | EDA | Data loaded: 244 rows, 7 columns
+2026-05-29 19:49:12 | INFO | EDA | Section 3: Inspect data shape and basic structure
+2026-05-29 19:49:12 | INFO | EDA | Inspecting first rows of data
+2026-05-29 19:49:12 | DEBUG | EDA | 
+   total_bill   tip     sex smoker  day    time  size
+0       16.99  1.01  Female     No  Sun  Dinner     2
+1       10.34  1.66    Male     No  Sun  Dinner     3
+2       21.01  3.50    Male     No  Sun  Dinner     3
+3       23.68  3.31    Male     No  Sun  Dinner     2
+4       24.59  3.61  Female     No  Sun  Dinner     4
+2026-05-29 19:49:12 | INFO | EDA | Column names
+2026-05-29 19:49:12 | DEBUG | EDA | ['total_bill', 'tip', 'sex', 'smoker', 'day', 'time', 'size']
+2026-05-29 19:49:12 | INFO | EDA | DataFrame info (types and non-null counts)
+2026-05-29 19:49:12 | INFO | EDA | Dataset shape: 244 rows, 7 columns
+2026-05-29 19:49:12 | INFO | EDA | Section 4: Check data quality
+2026-05-29 19:49:12 | INFO | EDA | Building starter data dictionary
+2026-05-29 19:49:12 | DEBUG | EDA | 
+       column     dtype  missing_count  missing_pct
+0  total_bill   float64              0          0.0
+1         tip   float64              0          0.0
+2         sex  category              0          0.0
+3      smoker  category              0          0.0
+4         day  category              0          0.0
+5        time  category              0          0.0
+6        size     int64              0          0.0
+2026-05-29 19:49:12 | INFO | EDA | Checking missing values per column
+2026-05-29 19:49:12 | DEBUG | EDA | 
+total_bill    0
+tip           0
+sex           0
+smoker        0
+day           0
+time          0
+size          0
+dtype: int64
+2026-05-29 19:49:12 | INFO | EDA | Duplicate rows detected: 1
+2026-05-29 19:49:12 | INFO | EDA | Basic sanity check for numeric columns
+2026-05-29 19:49:12 | DEBUG | EDA | 
+       total_bill         tip        size
+count  244.000000  244.000000  244.000000
+mean    19.785943    2.998279    2.569672
+std      8.902412    1.383638    0.951100
+min      3.070000    1.000000    1.000000
+25%     13.347500    2.000000    2.000000
+50%     17.795000    2.900000    2.000000
+75%     24.127500    3.562500    3.000000
+max     50.810000   10.000000    6.000000
+2026-05-29 19:49:12 | INFO | EDA | Section 5: Create a cleaned view for EDA
+2026-05-29 19:49:12 | INFO | EDA | Creating cleaned view for EDA (dropping rows with key missing values + duplicates)
+2026-05-29 19:49:12 | INFO | EDA | Cleaned view shape: 243 rows, 7 columns
+2026-05-29 19:49:12 | INFO | EDA | Section 5b: Add derived features
+2026-05-29 19:49:12 | INFO | EDA | Derived field added: spending_category
+2026-05-29 19:49:12 | INFO | EDA | Derived field added: bill_vs_day_avg
+2026-05-29 19:49:12 | INFO | EDA | Section 6: Compute descriptive statistics for numeric columns
+2026-05-29 19:49:12 | INFO | EDA | Computing overall descriptive statistics
+2026-05-29 19:49:12 | DEBUG | EDA | 
+                 count       mean       std       min        25%      50%        75%        max
+total_bill       243.0  19.813868  8.910071  3.070000  13.380000  17.8100  24.175000  50.810000
+tip              243.0   3.002387  1.385002  1.000000   2.000000   2.9200   3.575000  10.000000
+size             243.0   2.572016  0.952356  1.000000   2.000000   2.0000   3.000000   6.000000
+bill_vs_day_avg  243.0   1.000000  0.442742  0.150186   0.696287   0.8998   1.192655   2.485644
+2026-05-29 19:49:12 | INFO | EDA | Computing descriptive statistics by day
+2026-05-29 19:49:12 | DEBUG | EDA | 
+     total_bill                                     tip                                   size                      \
+          count       mean       std   min    max count      mean       std   min    max count      mean       std   
+day                                                                                                                  
+Thur         61  17.759508  7.928225  7.51  43.11    61  2.784098  1.246478  1.25   6.70    61  2.459016  1.073526   
+Fri          19  17.151579  8.302660  5.75  40.17    19  2.734737  1.019577  1.00   4.73    19  2.105263  0.567131   
+Sat          87  20.441379  9.480419  3.07  50.81    87  2.993103  1.631014  1.00  10.00    87  2.517241  0.819275   
+Sun          76  21.410000  8.832122  7.25  48.17    76  3.255132  1.234880  1.01   6.50    76  2.842105  1.007341   
+
+             bill_vs_day_avg                                     
+     min max           count mean       std       min       max  
+day                                                              
+Thur   1   6              61  1.0  0.446421  0.422872  2.427432  
+Fri    1   4              19  1.0  0.484076  0.335246  2.342058  
+Sat    1   5              87  1.0  0.463786  0.150186  2.485644  
+Sun    2   6              76  1.0  0.412523  0.338627  2.249883  
+2026-05-29 19:49:12 | INFO | EDA | Section 7: Show correlation matrix for numeric columns
+2026-05-29 19:49:12 | INFO | EDA | Computing correlation matrix for numeric columns
+2026-05-29 19:49:12 | DEBUG | EDA | 
+                 total_bill       tip      size  bill_vs_day_avg
+total_bill         1.000000  0.674998  0.597589         0.980556
+tip                0.674998  1.000000  0.488400         0.666384
+size               0.597589  0.488400  1.000000         0.578922
+bill_vs_day_avg    0.980556  0.666384  0.578922         1.000000
+2026-05-29 19:49:12 | INFO | EDA | Section 8: Make plots
+2026-05-29 19:49:12 | INFO | EDA | Creating scatter plot: total bill vs tip, colored by day
+2026-05-29 19:49:13 | INFO | EDA | Saved scatter plot to artifacts\scatter_total_bill_vs_tip.png
+2026-05-29 19:49:20 | INFO | EDA | Creating box plot: total bill by day
+2026-05-29 19:49:20 | INFO | EDA | Saved box plot to artifacts\box_total_bill_by_day.png
+2026-05-29 19:49:24 | INFO | EDA | EDA workflow complete
+2026-05-29 19:49:24 | INFO | EDA | IMPORTANT: This script creates chart windows.
+2026-05-29 19:49:24 | INFO | EDA | Close any chart windows and terminate this process with CTRL+c as needed.
