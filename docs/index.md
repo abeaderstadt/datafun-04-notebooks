@@ -25,8 +25,8 @@ This project uses Seaborn’s built-in tips dataset, which includes restaurant b
 ### Signals
 I used both the original dataset columns and a couple of engineered features:
 
-- Numeric columns: total_bill, tip, size
-- Categorical columns: day, time, sex, smoker
+- Numeric columns: `total_bill`, `tip`, `size`
+- Categorical columns: `day`, `time`, `sex`, `smoker`
 - New features I created:
   - `spending_category` (Low, Medium, High based on total bill)
   - `bill_vs_day_avg` (compares each bill to the average bill for that day)
@@ -36,8 +36,8 @@ These added features helped give a little more context to spending behavior inst
 ### Experiments
 I did two main feature engineering steps:
 
-- First, I binned total bill into a simple spending_category so it’s easier to see low vs high spenders at a glance.
-- Then I created bill_vs_day_avg, which compares each transaction to the average bill for that specific day. This helps show whether a bill is above or below “normal” for that day.
+- First, I binned total bill into a simple `spending_category` so it’s easier to see low vs high spenders at a glance.
+- Then I created `bill_vs_day_avg`, which compares each transaction to the average bill for that specific day. This helps show whether a bill is above or below “normal” for that day.
 
 ### Results
 
@@ -51,7 +51,7 @@ There is a clear positive relationship between total bill and tip amount, meanin
 
 Looking at spending by day, the distribution is fairly consistent across the week. While there are some small differences in spread and a few outliers, no single day stands out as dramatically higher or lower in spending.
 
-The derived feature bill_vs_day_avg adds more context to this pattern by showing how each transaction compares to the average for that day. Most values cluster around 1, which makes sense since it represents “average-level” spending, with some clear higher and lower outliers.
+The derived feature `bill_vs_day_avg` adds more context to this pattern by showing how each transaction compares to the average for that day. Most values cluster around 1, which makes sense since it represents “average-level” spending, with some clear higher and lower outliers.
 
 
 ### Interpretation
