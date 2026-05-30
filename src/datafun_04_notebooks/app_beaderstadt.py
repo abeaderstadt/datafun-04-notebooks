@@ -4,7 +4,7 @@ Author: Alissa Beaderstadt
 Date: 2026-05
 
 Purpose:
-- Perform exploratory data analysis (EDA) on the penguins dataset
+- Perform exploratory data analysis (EDA) on the tips dataset
 - Practice key Python skills in a notebook environment
 
 This file is written as a runnable script.
@@ -13,13 +13,11 @@ uv run python -m datafun_04_notebooks.app_beaderstadt
 
 
 Data Source:
-- Palmer Archipelago (Antarctica) penguin data
-- Available via Seaborn
+- Seaborn's built-in "tips" dataset, which contains information about restaurant tips.
 
 Assumptions:
 - The data contains columns like:
-  species, island, bill_length_mm, bill_depth_mm,
-  flipper_length_mm, body_mass_g, sex, year
+  total_bill, tip, sex, smoker, day, time, size
 
 """
 
@@ -32,6 +30,7 @@ Assumptions:
 # REQ.EXTERNAL.DEPS.IMPORTED: External packages used must be imported here
 
 import logging  # for type hinting only
+from pathlib import Path
 
 from datafun_toolkit.logger import get_logger, log_header
 from matplotlib.axes import Axes
@@ -46,14 +45,12 @@ LOG: logging.Logger = get_logger("EDA", level="DEBUG")
 
 # === Section 1c. Global Constants and Configuration ===
 
-NUMERIC_COLS = [
-    "bill_length_mm",
-    "bill_depth_mm",
-    "flipper_length_mm",
-    "body_mass_g",
-]
+NUMERIC_COLS = ["total_bill", "tip", "size", "bill_vs_day_avg"]
 
-GROUP_COL = "species"
+GROUP_COL = "day"
+
+ARTIFACTS_DIR = Path("artifacts")
+ARTIFACTS_DIR.mkdir(exist_ok=True)
 
 # Pandas display configuration (helps in notebooks)
 pd.set_option("display.max_columns", 50)
@@ -70,8 +67,8 @@ def load_data() -> pd.DataFrame:
     - Here we load data directly from Seaborn.
     - In other projects, you may load from CSV or a database.
     """
-    LOG.info("Loading penguins dataset from seaborn")
-    df = sns.load_dataset("penguins")
+    LOG.info("Loading tips dataset from seaborn")
+    df = sns.load_dataset("tips")
     LOG.info("Data loaded: %s rows, %s columns", df.shape[0], df.shape[1])
     return df
 
@@ -141,7 +138,7 @@ def check_quality(df: pd.DataFrame) -> None:
     LOG.info("Duplicate rows detected: %s", dup_count)
 
     LOG.info("Basic sanity check for numeric columns")
-    LOG.debug("\n%s", df[NUMERIC_COLS].describe())
+    LOG.debug("\n%s", df[["total_bill", "tip", "size"]].describe())
 
 
 # === Section 5. Optional Cleaning Step (EDA View) ===
@@ -154,8 +151,11 @@ def make_clean_view(df: pd.DataFrame) -> pd.DataFrame:
     - Keep the original DataFrame unchanged
     - Drop rows missing key numeric fields and grouping field
     """
-    LOG.info("Creating cleaned view for EDA (dropping rows with key missing values)")
-    df_clean = df.dropna(subset=NUMERIC_COLS + [GROUP_COL]).copy()
+    LOG.info(
+        "Creating cleaned view for EDA (dropping rows with key missing values + duplicates)"
+    )
+    df_clean = df.dropna(subset=["total_bill", "tip", "size", "day"]).copy()
+    df_clean = df_clean.drop_duplicates()
     LOG.info(
         "Cleaned view shape: %s rows, %s columns", df_clean.shape[0], df_clean.shape[1]
     )
@@ -163,32 +163,34 @@ def make_clean_view(df: pd.DataFrame) -> pd.DataFrame:
 
 
 # === Section 5b. Derived Features ===
-def add_body_size_category(df: pd.DataFrame) -> pd.DataFrame:
-    """Add body size categories based on body mass."""
+
+
+def add_spending_category(df: pd.DataFrame) -> pd.DataFrame:
+    """Add spending categories based on total bill amount."""
 
     df = df.copy()
 
-    df["body_size_category"] = pd.cut(
-        df["body_mass_g"],
-        bins=[0, 4000, 5000, 7000],
-        labels=["Small", "Medium", "Large"],
+    df["spending_category"] = pd.cut(
+        df["total_bill"],
+        bins=[0, 15, 30, 60],
+        labels=["Low", "Medium", "High"],
     )
 
-    LOG.info("Derived field added: body_size_category")
+    LOG.info("Derived field added: spending_category")
 
     return df
 
 
-def add_mass_vs_species_avg(df: pd.DataFrame) -> pd.DataFrame:
-    """Add a feature comparing each penguin's mass to its species average."""
+def add_bill_vs_day_avg(df: pd.DataFrame) -> pd.DataFrame:
+    """Compare each bill to the average bill for that day."""
 
     df = df.copy()
 
-    species_avg = df.groupby("species")["body_mass_g"].transform("mean")
+    day_avg = df.groupby("day")["total_bill"].transform("mean")
 
-    df["mass_vs_species_avg"] = df["body_mass_g"] / species_avg
+    df["bill_vs_day_avg"] = df["total_bill"] / day_avg
 
-    LOG.info("Derived field added: mass_vs_species_avg")
+    LOG.info("Derived field added: bill_vs_day_avg")
 
     return df
 
@@ -213,13 +215,13 @@ def descriptive_stats(df_clean: pd.DataFrame) -> tuple[pd.DataFrame, pd.DataFram
     stats_overall = df_clean[NUMERIC_COLS].describe().T
     LOG.debug("\n%s", stats_overall)
 
-    LOG.info("Computing descriptive statistics by species")
-    stats_by_species = df_clean.groupby(GROUP_COL)[NUMERIC_COLS].agg(
+    LOG.info("Computing descriptive statistics by day")
+    stats_by_day = df_clean.groupby(GROUP_COL)[NUMERIC_COLS].agg(
         ["count", "mean", "std", "min", "max"]
     )
-    LOG.debug("\n%s", stats_by_species)
+    LOG.debug("\n%s", stats_by_day)
 
-    return stats_overall, stats_by_species
+    return stats_overall, stats_by_day
 
 
 # === Section 7. Simple Correlations (Numeric Only) ===
@@ -248,32 +250,50 @@ def correlation_matrix(df_clean: pd.DataFrame) -> pd.DataFrame:
 
 
 def make_plots(df_clean: pd.DataFrame) -> None:
-    """Create simple, notebook-friendly plots.
+    """Create simple, notebook-friendly plots."""
 
-    Notes for learners:
-    - Plots help reveal patterns not obvious in tables.
-    """
-    LOG.info("Creating scatter plot: flipper length vs bill length")
+    LOG.info("Creating scatter plot: total bill vs tip, colored by day")
 
+    # --- Scatter Plot ---
     scatter_plt: Axes = sns.scatterplot(
         data=df_clean,
-        x="flipper_length_mm",
-        y="bill_length_mm",
+        x="total_bill",
+        y="tip",
         hue=GROUP_COL,
     )
-    scatter_plt.set_xlabel("Flipper length (mm)")
-    scatter_plt.set_ylabel("Bill length (mm)")
-    scatter_plt.set_title("Flipper length vs Bill length (by species)")
 
-    plt.figure()
-    sns.boxplot(
-        data=df_clean,
-        x=GROUP_COL,
-        y="flipper_length_mm",
-    )
-    plt.title("Flipper length by species")
+    scatter_plt.set_xlabel("Total Bill ($)")
+    scatter_plt.set_ylabel("Tip ($)")
+    scatter_plt.set_title("Total Bill vs Tip (by Day)")
+
+    scatter_path = ARTIFACTS_DIR / "scatter_total_bill_vs_tip.png"
+    plt.savefig(scatter_path, dpi=300, bbox_inches="tight")
+    LOG.info("Saved scatter plot to %s", scatter_path)
 
     plt.show()
+    plt.clf()
+
+    # --- Box Plot ---
+    LOG.info("Creating box plot: total bill by day")
+
+    plt.figure()
+
+    box_plt = sns.boxplot(
+        data=df_clean,
+        x=GROUP_COL,
+        y="total_bill",
+    )
+
+    box_plt.set_xlabel("Day")
+    box_plt.set_ylabel("Total Bill ($)")
+    box_plt.set_title("Total Bill Distribution by Day")
+
+    box_path = ARTIFACTS_DIR / "box_total_bill_by_day.png"
+    plt.savefig(box_path, dpi=300, bbox_inches="tight")
+    LOG.info("Saved box plot to %s", box_path)
+
+    plt.show()
+    plt.clf()
 
 
 # === Section LAST. Reminder: Run All before sending to GitHub ===
@@ -281,7 +301,7 @@ def make_plots(df_clean: pd.DataFrame) -> None:
 
 def main() -> None:
     """Main function to run the EDA workflow."""
-    log_header(LOG, "Exploratory Data Analysis (EDA) - Penguins")
+    log_header(LOG, "Exploratory Data Analysis (EDA) - Tips Dataset")
 
     LOG.info("Section 1: Setup at the top of the file")
 
@@ -299,8 +319,8 @@ def main() -> None:
     df_clean = make_clean_view(df)
 
     LOG.info("Section 5b: Add derived features")
-    df_clean = add_body_size_category(df_clean)
-    df_clean = add_mass_vs_species_avg(df_clean)
+    df_clean = add_spending_category(df_clean)
+    df_clean = add_bill_vs_day_avg(df_clean)
 
     LOG.info("Section 6: Compute descriptive statistics for numeric columns")
     descriptive_stats(df_clean)
