@@ -8,7 +8,7 @@
 #
 # WHY: This data file provides the site structure and settings
 
-site_name: "Project Documentation"
+site_name: " Custom Project Documentation"
 site_url: https://abeaderstadt.github.io/datafun-04-notebooks/
 repo_url: https://github.com/abeaderstadt/datafun-04-notebooks
 site_description: Project documentation.
