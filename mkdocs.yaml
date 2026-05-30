@@ -34,13 +34,13 @@ theme:
 
   palette:
     - scheme: default # Light/dark mode toggle
-      primary: blue
+      primary: purple
       accent: blue
       toggle:
         icon: material/brightness-7
         name: Switch to dark mode
     - scheme: slate
-      primary: blue
+      primary: purple
       accent: blue
       toggle:
         icon: material/brightness-4
