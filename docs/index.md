@@ -28,6 +28,7 @@ I used both the original dataset columns and a couple of engineered features:
 - Numeric columns: `total_bill`, `tip`, `size`
 - Categorical columns: `day`, `time`, `sex`, `smoker`
 
+
 - New features I created:
   - `spending_category` (Low, Medium, High based on total bill)
   - `bill_vs_day_avg` (compares each bill to the average bill for that day)
