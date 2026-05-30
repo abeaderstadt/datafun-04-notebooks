@@ -42,12 +42,12 @@ I did two main feature engineering steps:
 A few clear patterns showed up in the data once the visualizations and derived features were added.
 
 ### Tip vs Total Bill Relationship
-![Scatter Plot](../artifacts/scatter_total_bill_vs_tip.png)
+![Scatter Plot](charts/scatter_total_bill_vs_tip.png)
 
 There is a clear positive relationship between total bill and tip amount, meaning larger bills generally result in higher tips. Party size also appears to play a smaller role, since larger groups tend to appear more often in the higher spending range.
 
 ### Spending Distribution by Day
-![Box Plot](../artifacts/box_total_bill_by_day.png)
+![Box Plot](charts/box_total_bill_by_day.png)
 
 Looking at spending by day, the distribution is fairly consistent across the week. While there are some small differences in spread and a few outliers, no single day stands out as dramatically higher or lower in spending.
 
