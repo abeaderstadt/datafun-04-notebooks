@@ -22,6 +22,7 @@ This project uses Seaborn’s built-in tips dataset, which includes restaurant b
 
 ### Signals
 I used both the original dataset columns and a couple of engineered features:
+
 - Numeric columns: total_bill, tip, size
 - Categorical columns: day, time, sex, smoker
 - New features I created:
