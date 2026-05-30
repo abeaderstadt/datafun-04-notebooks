@@ -20,7 +20,7 @@ See:
 ## Custom Project
 
 ### Dataset
-This project uses Seaborn’s built-in tips dataset, which includes restaurant billing data like total bill, tip amount, party size, and some context like day of the week, time of day, and customer info. It’s a nice mix of numeric and categorical data, so it works well for practicing basic EDA and feature engineering.
+For my custom project, I used Seaborn’s built-in tips dataset, which includes restaurant billing data like total bill, tip amount, party size, and some context like day of the week, time of day, and customer info. It’s a nice mix of numeric and categorical data, so it works well for practicing basic EDA and feature engineering.
 
 ### Signals
 I used both the original dataset columns and a couple of engineered features:
